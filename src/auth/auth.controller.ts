@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
@@ -7,12 +7,22 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
-  login(@Body() userDto: CreateUserDto) {
-    return this.authService.login(userDto);
+  async login(@Body() usersDto: CreateUserDto) {
+    try {
+      const result = await this.authService.login(usersDto);
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Post('/registration')
-  registration(@Body() userDto: CreateUserDto) {
-    return this.authService.registration(userDto);
+  async registration(@Body() userDto: CreateUserDto) {
+    try {
+      const result = await this.authService.registration(userDto);
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

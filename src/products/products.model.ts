@@ -1,5 +1,6 @@
 import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
 import { Product_image } from '../product_images/product_images.model';
+import { Cart } from 'src/cart/carts.model';
 
 interface ProductCreationAttr {
   productName: string;
@@ -20,4 +21,7 @@ export class Product extends Model<Product, ProductCreationAttr> {
 
   @HasMany(() => Product_image)
   images: Product_image[];
+
+  @HasMany(() => Cart, { foreignKey: 'product_id' })
+  carts: Cart[];
 }

@@ -8,9 +8,7 @@ import { Product_image } from '../product_images/product_images.model';
 @Module({
   controllers: [ProductsController],
   providers: [ProductsService],
-  imports: [
-    SequelizeModule.forFeature([Product, Product_image]),
-
-  ],
+  imports: [SequelizeModule.forFeature([Product, Product_image])],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

@@ -4,7 +4,8 @@ import {
   Body,
   Get,
   BadRequestException,
-  UnauthorizedException,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductsDto } from '../dto/create-product.dto';
@@ -25,8 +26,24 @@ export class ProductsController {
 
   @Get()
   async getAll() {
-    const products = await this.productsService.getAllProducts();
-    return products;
+    try {
+      const products = await this.productsService.getAllProducts();
+      return products;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    try {
+      const product = await this.productsService.findOne(id);
+      return product;
+    } catch (error) {
+      throw new NotFoundException(
+        `Product with id: ${id} not found`,
+        error.message,
+      );
+    }
   }
 }
-

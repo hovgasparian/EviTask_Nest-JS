@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { Product } from './products/products.model';
 import { Product_image } from './product_images/product_images.model';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/carts.model';
 
 @Module({
   imports: [
@@ -25,13 +27,14 @@ import { Product_image } from './product_images/product_images.model';
       port: 3306,
       username: 'root',
       database: 'Nest_Task',
-      models: [User, Role, UserRoleRel, Product, Product_image],
+      models: [User, Role, UserRoleRel, Product, Product_image, Cart],
       autoLoadModels: true,
     }),
     UsersModule,
     RolesModule,
     AuthModule,
     ProductsModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

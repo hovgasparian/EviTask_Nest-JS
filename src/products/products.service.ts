@@ -35,4 +35,12 @@ export class ProductsService {
     });
     return products;
   }
+
+  async findOne(id: number) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+      include: { model: Product_image, attributes: ['img_url'] },
+    });
+    return product;
+  }
 }

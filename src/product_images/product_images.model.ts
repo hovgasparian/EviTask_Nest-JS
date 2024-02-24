@@ -28,5 +28,3 @@ export class Product_image extends Model<
   @BelongsTo(() => Product)
   product: Product;
 }
-
-

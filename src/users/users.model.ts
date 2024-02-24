@@ -2,11 +2,13 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Role } from 'src/roles/roles.model';
 import { UserRoleRel } from 'src/roles/user.role.rel';
+import { Cart } from 'src/cart/carts.model';
 
 interface UserCreationAttr {
   name: string;
@@ -45,4 +47,7 @@ export class User extends Model<User, UserCreationAttr> {
 
   @BelongsToMany(() => Role, () => UserRoleRel)
   roles: Role[];
+
+  @HasOne(() => Cart, { foreignKey: 'user_id' })
+  cart: Cart;
 }

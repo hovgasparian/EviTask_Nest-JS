@@ -33,6 +33,17 @@ export class UsersService {
     return users;
   }
 
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      include: {
+        model: Role,
+        attributes: ['id', 'roleName'],
+      },
+    });
+    return user;
+  }
+
   async getUsersByEmail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email },

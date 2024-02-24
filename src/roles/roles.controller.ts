@@ -1,4 +1,14 @@
-import { Controller, Post, Body, Param, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Get,
+  UseGuards,
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from 'src/dto/create-role.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -10,25 +20,45 @@ export class RolesController {
   constructor(private roleService: RolesService) {}
 
   @Post()
-  create(@Body() roleDto: CreateRoleDto) {
-    return this.roleService.createRole(roleDto);
+  async create(@Body() roleDto: CreateRoleDto) {
+    try {
+      const role = await this.roleService.createRole(roleDto);
+      return role;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Roles('Admin')
   @UseGuards(RolesGuard)
   @Get()
-  getAllRoles() {
-    return this.roleService.getAllRoles();
+  async getAllRoles() {
+    try {
+      const roles = this.roleService.getAllRoles();
+      return roles;
+    } catch (error) {
+      throw new UnauthorizedException('No access');
+    }
   }
 
   @Get('/:id')
-  getRoleById(@Param('id') id: number) {
-    return this.roleService.getRoleById(id);
+  async getRoleById(@Param('id') id: number) {
+    try {
+      const role = this.roleService.getRoleById(id);
+      return role;
+    } catch (error) {
+      throw new NotFoundException(`Role with id: ${id} not found`);
+    }
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:roleName')
-  getByRoleName(@Param('roleName') roleName: string) {
-    return this.roleService.getRoleByName(roleName);
+  @Get('/name/:roleName')
+  async getByRoleName(@Param('roleName') roleName: string) {
+    try {
+      const role = this.roleService.getRoleByName(roleName);
+      return role;
+    } catch (error) {
+      throw new NotFoundException(`Role ${roleName} not found`);
+    }
   }
 }
